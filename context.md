@@ -97,3 +97,31 @@ npm run dev:all
 - Replace hardcoded `playerID`/`matchID` in `App.tsx` with an actual
   lobby/player-join flow.
 - Start building real `GameState` once a design brief exists.
+
+## Session 2 — 2026-09-20
+
+No code changes — this session was walkthrough/explanation only, working
+against the scaffold built in Session 1.
+
+- Explained the dev-time topology (Vite on :3000 serving the React app,
+  boardgame.io server on :8000 holding game state, browser talking to
+  both) versus the eventual production topology (one always-on VPS
+  process is the sole source of truth; every player's machine runs
+  nothing but a browser).
+- Clarified what `Client({...})` from `boardgame.io/react` actually is:
+  a function that returns a pre-wired React component (bakes in the
+  game rules, the `Board` renderer, and the transport config), not a
+  literal factory pattern.
+- Demoed two-player turn-taking in one browser tab using boardgame.io's
+  built-in debug panel: switching the `PLAYERS` selector changes the
+  `playerID` our single `GameClient` is using (confirmed live — it's
+  not a second parallel connection, it visibly changed our own "You
+  are player: X" text too). A move is only accepted by the server when
+  the client's current `playerID` matches `ctx.currentPlayer`, which is
+  exactly what production turn-taking relies on — real players just
+  don't need a selector because each browser is permanently locked to
+  one `playerID`.
+- Match state (`log`, `turn` counter) has been accumulating in the
+  server's memory across the whole session — confirmed it survives
+  page reloads, since it only resets on server restart or the debug
+  panel's `reset` button.

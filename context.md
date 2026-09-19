@@ -59,8 +59,39 @@ of each session per CLAUDE.md.
   whether the affected surface (CORS defaults, socket.io transport) is
   actually reachable in production.
 
+- First commit made and pushed to `origin/main` on GitHub.
+
+### Dropbox + node_modules gotcha (fixed, worth knowing)
+Running `npm run dev:all` from a fresh clone/install produced a blank
+page at `localhost:3000` with `EBUSY: resource busy or locked` errors
+in the Vite log, and repeated `EADDRINUSE :::8000` crashes on the
+boardgame.io server. Two compounding causes:
+
+1. **Dropbox was actively syncing `node_modules`.** Vite's dependency
+   pre-bundler does atomic renames inside `node_modules/.vite` on
+   startup; Dropbox's sync daemon holds file locks on the same files,
+   so the rename fails. Fixed by marking `node_modules` as ignored via
+   Dropbox's own exclusion mechanism (an NTFS alternate-data-stream
+   attribute, not a `.gitignore` — that only affects git):
+   ```powershell
+   Set-Content -Path "node_modules" -Stream com.dropbox.ignored -Value 1
+   ```
+   **Do this once per machine** after `npm install` on any fresh clone
+   in this Dropbox folder — `node_modules` isn't committed to git, so
+   the attribute has to be re-applied per machine/per fresh install.
+2. **Zombie dev-server processes.** Repeated test runs left several
+   orphaned `tsx watch` (server) and `vite` processes running in the
+   background, fighting each other for ports 3000/8000. If `dev:all`
+   throws `EADDRINUSE`, check for and kill leftover Node processes
+   before retrying rather than just re-running the command.
+
+If a stale dep-cache error recurs, clear it and restart:
+```bash
+rm -rf node_modules/.vite
+npm run dev:all
+```
+
 ### Next steps
-- First commit + push to GitHub (pending commit message approval).
 - Real game design brief (board layout, player stats, combat, enemy
   AI) — arrives from a separate design session per CLAUDE.md.
 - Replace hardcoded `playerID`/`matchID` in `App.tsx` with an actual

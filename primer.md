@@ -2,9 +2,7 @@ Last updated: 2026-09-20
 
 # Kreacher Killer — Background Primer
 
-This document is background context only, not a task list. It exists so you understand the shared vocabulary, overall shape, and direction of the project — enough to make sensible, consistent implementation decisions (naming, structure, organization) without guessing at game design. It is not a substitute for the specific Implementation Briefs you'll receive per feature — those are the actual instructions for what to build, when.
-
-**Role boundary:** You do not make game design decisions — mechanics, rules, numeric values, and terminology are all decided in the design chat and handed to you via specific briefs. If something in a brief seems ambiguous, or you think a design decision is being implicitly required of you, flag it as a question rather than guessing or inventing a rule. Within that boundary, you have full latitude over implementation choices — internal architecture, code organization, exact variable/field naming, and library usage within the established stack (boardgame.io, React, TypeScript, Node.js) — and should prefer naming that aligns with the terminology below where it applies.
+This document is background context only, not a task list. It exists so you understand the shared vocabulary, overall shape, and direction of the project — enough to make sensible, consistent implementation decisions (naming, structure, organization) without guessing at game design. It is not a substitute for the specific Implementation Briefs you'll receive per feature — those are the actual instructions for what to build, when. For who decides what, and what to do if you're unsure, see roles-and-demarcation.md.
 
 ## What the game is
 

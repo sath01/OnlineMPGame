@@ -125,3 +125,20 @@ against the scaffold built in Session 1.
   server's memory across the whole session — confirmed it survives
   page reloads, since it only resets on server restart or the debug
   panel's `reset` button.
+
+## Session 3 — 2026-09-20
+
+No code changes — reference-document reorg from the design/admin side.
+
+- `primer.md` and a new `roles-and-demarcation.md` replace the
+  previous single `primer.md` (which had a "Role boundary" paragraph
+  inline). `primer.md` is now game-content only; the role/escalation
+  material moved to `roles-and-demarcation.md`, which is now the
+  canonical source for who decides what and when to flag vs. proceed.
+  No `collaboration.md` existed in this project to delete.
+- Updated `CLAUDE.md`'s Working Approach and folder-structure sections
+  to read all three of `context.md`, `primer.md`, and
+  `roles-and-demarcation.md` at the start of every session, and to
+  point at `roles-and-demarcation.md` rather than restating its
+  content inline — avoids the same duplication-drift problem this
+  reorg was fixing.

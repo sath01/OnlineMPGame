@@ -21,9 +21,10 @@ design; this section stays a short orientation summary only.
 
 ### Project Folder Structure
 GameProject/
-├── CLAUDE.md        (this file)
-├── context.md       (current build state — update at end of each session)
-├── primer.md        (stable game-design background — see Working Approach)
+├── CLAUDE.md               (this file)
+├── context.md              (current build state — update at end of each session)
+├── primer.md               (stable game-design background — see Working Approach)
+├── roles-and-demarcation.md (who decides what, altitude line, when to flag — see Working Approach)
 ├── assets/
 │   ├── sprites/
 │   ├── tiles/
@@ -32,17 +33,22 @@ GameProject/
 
 ### Working Approach
 - Rapid iterative development — build small, test, adjust
-- Read both `context.md` and `primer.md` at the start of every session.
-  `context.md` is current build state (implementation-side, updated by
-  Claude Code each session). `primer.md` is stable background from the
-  design side — shared vocabulary, project shape, and direction; it
-  does not track live implementation status. Don't make game design
-  decisions yourself (mechanics, rules, numeric values, terminology) —
-  those come from the design side via specific Implementation Briefs;
-  flag ambiguity as a question rather than guessing.
-- When an updated section for `primer.md` arrives, replace just that
-  section and update its "Last updated" line — don't rewrite the whole
-  file.
+- Read `context.md`, `primer.md`, and `roles-and-demarcation.md` at
+  the start of every session. `context.md` is current build state
+  (implementation-side, updated by Claude Code each session). The
+  other two are stable background maintained by the design/admin
+  side — don't edit them directly:
+  - `primer.md` — game content: what the game is, terminology, the
+    four-tier ruleset system, roadmap.
+  - `roles-and-demarcation.md` — who decides what (Design chat / Admin
+    chat / Claude Code), the altitude line between a brief's "what and
+    why" and Claude Code's "how it's built," and when to flag rather
+    than guess. This is the canonical source for that — if anything
+    elsewhere (including older notes in this file or in context.md)
+    conflicts with it, it wins.
+- When an updated section for either reference file arrives, replace
+  just that section and update its "Last updated" line — don't
+  rewrite the whole file.
 - Game design decisions arrive as implementation briefs from separate 
   Claude.ai design sessions
 - Update context.md at the end of each session with what was built, 

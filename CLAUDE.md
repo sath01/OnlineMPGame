@@ -1,11 +1,14 @@
 ## Game Project
 
 ### What We're Building
-A cooperative online turn-based RPG game. Multiple players connect online 
-and cooperate against AI-controlled enemies on a shared game board. 
-Turn-based — players take actions in sequence, then enemies act. 
-Inspired by Zombicide but more open and RPG-style in nature.
-Solo play against the machine is a future goal, not the immediate focus.
+A cooperative online turn-based RPG game ("Kreacher Killer"). Multiple
+players connect online and cooperate against AI-controlled enemies on
+a shared game board. Turn-based — players take actions in sequence,
+then enemies act. Inspired by Zombicide but more open and RPG-style in
+nature. Solo play against the machine is a future goal, not the
+immediate focus. See `primer.md` for full game-design background
+(terminology, ruleset tiers, roadmap) — that file is authoritative for
+design; this section stays a short orientation summary only.
 
 ### Tech Stack Decided
 - boardgame.io — game state management, turn structure, multiplayer networking
@@ -20,6 +23,7 @@ Solo play against the machine is a future goal, not the immediate focus.
 GameProject/
 ├── CLAUDE.md        (this file)
 ├── context.md       (current build state — update at end of each session)
+├── primer.md        (stable game-design background — see Working Approach)
 ├── assets/
 │   ├── sprites/
 │   ├── tiles/
@@ -28,6 +32,17 @@ GameProject/
 
 ### Working Approach
 - Rapid iterative development — build small, test, adjust
+- Read both `context.md` and `primer.md` at the start of every session.
+  `context.md` is current build state (implementation-side, updated by
+  Claude Code each session). `primer.md` is stable background from the
+  design side — shared vocabulary, project shape, and direction; it
+  does not track live implementation status. Don't make game design
+  decisions yourself (mechanics, rules, numeric values, terminology) —
+  those come from the design side via specific Implementation Briefs;
+  flag ambiguity as a question rather than guessing.
+- When an updated section for `primer.md` arrives, replace just that
+  section and update its "Last updated" line — don't rewrite the whole
+  file.
 - Game design decisions arrive as implementation briefs from separate 
   Claude.ai design sessions
 - Update context.md at the end of each session with what was built, 

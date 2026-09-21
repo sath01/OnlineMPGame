@@ -25,6 +25,7 @@ GameProject/
 ├── context.md              (current build state — update at end of each session)
 ├── primer.md               (stable game-design background — see Working Approach)
 ├── roles-and-demarcation.md (who decides what, altitude line, when to flag — see Working Approach)
+├── TESTING.md              (CC's own testing strategy — CC owns and edits this one)
 ├── assets/
 │   ├── sprites/
 │   ├── tiles/
@@ -49,6 +50,10 @@ GameProject/
 - When an updated section for either reference file arrives, replace
   just that section and update its "Last updated" line — don't
   rewrite the whole file.
+- Follow `TESTING.md` for how each feature gets tested (which of its
+  three levels apply, and why). Unlike the two reference files above,
+  this one is Claude Code's own and gets revised as testing practice
+  on this project evolves.
 - Game design decisions arrive as implementation briefs from separate 
   Claude.ai design sessions
 - Update context.md at the end of each session with what was built, 

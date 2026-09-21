@@ -1,4 +1,4 @@
-Last updated: 2026-09-20
+Last updated: 2026-09-21
 
 # Roles & Demarcation
 
@@ -6,10 +6,12 @@ This is the single source of truth for who decides what on this project, across 
 
 ## Document map
 
-- **This document** — who decides what, the altitude line, what to do when unsure. Read by all three: Design chat, Admin chat, CC.
-- **primer.md** — game content: what the game is, terminology, the four-tier ruleset system, roadmap. Owned by Design chat. Read by CC and Design chat.
+"Owned by," below, means direct edit rights over that document's own content — not just decision-making authority over the topic. Structural changes (splitting a document, creating a new one, changing how documents relate to each other) always route through Admin chat, regardless of who owns the content inside.
+
+- **This document** — who decides what, the altitude line, what to do when unsure. Owned by Admin chat, since it's a process document; content affecting Design chat's own role is checked with Design chat before it ships. Read by all three: Design chat, Admin chat, CC.
+- **primer.md** — game content: what the game is, terminology, the four-tier ruleset system, roadmap. Owned and edited directly by Design chat, for content and terminology changes, via its own artifact tools — no Admin transcription step required. Read by CC and Design chat.
 - **Implementation Brief Template** — how a brief gets drafted and delivered. Owned by Admin chat. Used by Design chat.
-- **Decision History Logs** — one per chat, the settled-decision record for that chat's domain.
+- **Decision History Logs** — one per chat, the settled-decision record for that chat's domain. Each chat edits its own.
 
 ## The three roles
 

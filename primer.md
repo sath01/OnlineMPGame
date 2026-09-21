@@ -1,4 +1,4 @@
-Last updated: 2026-09-20
+Last updated: 2026-09-21
 
 # Kreacher Killer — Background Primer
 
@@ -12,14 +12,18 @@ Kreacher Killer is a cooperative, online, turn-based RPG for 1–6 players, insp
 
 - **Character** — a player-controlled unit (replaces the term "Survivor" from the source material). Generic and genre-neutral.
 - **Kreacher** — an enemy unit controlled by the game (replaces "Zombie"/"Xeno").
-- **Actor** — the generic term covering Character, Kreacher, and Machine — anything that can activate and spend Actions.
-- **Action** — the atomic, loggable unit of activity an Actor spends from its Action pool during an activation (a Move, an Attack, a Search, etc.).
+- **Actor** — the generic term covering Character and Kreacher, the only two Actor categories in the game — anything that has an Action pool and spends Actions from it.
+- **Action** — the atomic, loggable unit of activity an Actor spends from its Action pool (a Move, an Attack, a Search, etc.).
+- **Round** — one complete cycle of Players' Phase, Kreachers' Phase, and End Phase.
+- **Action pool** — the set of unspent Actions currently available to an Actor.
+- **Action log** — the chronological record of committed Actions during the current Players' Phase, used to support undo.
+- **Free-form resolution / Staged multi-pass resolution** — the two generic, hardcoded mechanisms by which the Players' Phase and Kreachers' Phase respectively resolve their Actors' Action pools.
 - **Player** — a human controlling one or more Characters. The number of Characters per Player is a configurable setting, not fixed.
 - **Zone** — the basic unit of space on the board (a room, a corridor section, an exterior area, etc.).
 - **Mission** — a single scenario: its tiles, spawn zones, objectives, and win/loss conditions.
 - **Campaign** — a sequence of Missions played by the same set of Characters, who carry XP, Skills, and Equipment between Missions. A standalone Mission is the degenerate case of a Campaign with one Mission and no carry-over.
 - **Session** — one real-world sitting (login to logout). A Mission may span one Session or several.
-- **Players' Phase / Kreachers' Phase / End Phase** — the three-phase Round structure. Players' Phase allows any Player to act with any of their Characters in any order; Kreachers' Phase covers Kreacher activation then spawning; End Phase resets per-round state.
+- **Players' Phase / Kreachers' Phase / End Phase** — the three-phase Round structure. Players' Phase resolves Characters' Action pools via free-form resolution, in any order any Player chooses; Kreachers' Phase resolves Kreachers' Action pools via staged multi-pass resolution, then spawns new Kreachers; End Phase resets per-round state.
 - **Danger Level** — the mechanism tying Kreacher spawn scaling to Character progression. Likely to diverge from the original Zombicide model once Campaigns are supported — this is a known open design question, not yet finalized.
 - **Genre pack** — a data-driven content bundle (Kreacher types, weapons, equipment, flavor) for a specific setting, designed to plug into the same engine.
 

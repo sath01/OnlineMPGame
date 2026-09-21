@@ -142,3 +142,129 @@ No code changes — reference-document reorg from the design/admin side.
   point at `roles-and-demarcation.md` rather than restating its
   content inline — avoids the same duplication-drift problem this
   reorg was fixing.
+
+## Session 4 — 2026-09-21
+
+Added `TESTING.md` (CC-owned testing strategy: unit / integration /
+mandatory manual-verification levels, with discipline rules against
+test-for-test's-sake bloat — see that file for the full reasoning) and
+implemented the first real feature: **Core Game Loop & Turn Structure**.
+
+### Built
+- `src/game/core/types.ts` — `Actor`, `ActionPool`, `Phase`,
+  `GameCoreState`, `ResolvedMissionRules`, and the three hook types
+  (`WinLossCheck`, `SpawnStepHook`, `ActionEffectResolver`) this
+  feature structurally depends on but doesn't own the behavior of.
+- `src/game/core/actors.ts` — pool refill/spend/exhaustion helpers.
+- `src/game/core/round.ts` — the actual state machine: `createInitialState`,
+  `commitAction`, `undoLastAction`, and an internal `settle()` that
+  cascades automatic Phase transitions (Players' → Kreachers' → End →
+  next Players', rules 1-3/18-22) until either the Mission halts or a
+  Phase genuinely needs external input. Framework-free — no
+  boardgame.io import in this module at all.
+- `src/game/core/rules.ts` — placeholder `defaultHooks` (all no-ops;
+  `undoEnabled: true` is a scaffold default, not a design decision —
+  Campaign & Mission Structure owns the real value).
+- `src/game/game.ts` — thin boardgame.io adapter: two moves
+  (`commitAction`, `undoLastAction`) that call the core functions and
+  return the new `G` or `INVALID_MOVE`. Uses `turn.activePlayers:
+  ActivePlayers.ALL` so boardgame.io's own single-current-player turn
+  gate stays out of the way — all legality now lives in `core/round.ts`.
+  Also carries a scaffold-only `spawnStep` (spawns 2 placeholder
+  Kreachers the first time it runs) purely so the Kreachers' Phase is
+  observable in the browser; real Spawn behavior is Kreacher Spawning
+  & Basic AI's job.
+- `src/components/Board.tsx` — minimal plain-HTML view (Round, Phase,
+  each Actor's pool, commit/undo buttons, the log) — enough to drive
+  Level 3 verification without waiting on PixiJS.
+
+### Architecture decisions
+- Round/Phase/Actor/ActionPool logic lives entirely in framework-free
+  `core/` modules, independent of boardgame.io. boardgame.io's own
+  `phases`/`stages`/turn-order system is unused — it's built around
+  single-seat turn order, which doesn't fit free-form (any Player, any
+  Character, any time) or staged (Kreachers aren't players at all)
+  resolution. boardgame.io is transport/sync only.
+- Snapshot deep-cloning uses a JSON round-trip, not `structuredClone` —
+  caught by the Level 2 integration tests: boardgame.io hands moves an
+  Immer draft (a Proxy), which `structuredClone` cannot clone but
+  `JSON.stringify` reads through fine. This is exactly the class of bug
+  TESTING.md's Level 2 exists to catch and Level 1 structurally can't.
+- Undo restores `{round, phase, actors, kreachersActingProgress,
+  missionResult}` from a snapshot taken *before* the log entry itself
+  is appended, and separately pops the log entry — rather than
+  snapshotting the log too and letting removal fall out "for free."
+  Simpler to reason about and avoids O(n²) nested-snapshot growth
+  across a long Players' Phase.
+
+### Verified (see TESTING.md's three levels)
+- **Level 1** — 28 unit tests in `core/round.test.ts`, mapped to the
+  brief's 25 numbered rules plus a snapshot-isolation edge case.
+- **Level 2** — 6 integration tests in `game.test.ts` against a headless
+  boardgame.io `Client` (no React/browser). Caught the Immer-draft/
+  `structuredClone` bug above — level 1 alone could not have found it.
+- **Level 3** — full manual pass in the browser: Round/Phase cycling,
+  refill timing (Kreachers only refill entering their own Phase, not at
+  Round start), free-form multi-Character commits, undo restoring state
+  live, and the staged multi-pass constraint (a Kreacher blocked from
+  acting twice until every other eligible Kreacher has gone once,
+  confirmed both ways — rejected then allowed next pass). Win/loss halt
+  wasn't exercised live since it needs a real condition, which is
+  correctly out of scope here (Win/Loss Framework's job) — covered by
+  levels 1 and 2 instead.
+- `npm test`, `npm run lint`, `npx tsc -b --noEmit` all clean.
+
+### Resolved — terminology folded into primer.md
+The brief's Terminology section asked for four new terms (Round, Action
+pool, Action log, free-form/staged multi-pass resolution) to be folded
+into `primer.md`. CC doesn't edit that file directly, so this was
+flagged rather than done here — Design chat has since updated it
+directly. `primer.md` and `roles-and-demarcation.md` were both
+refreshed (2026-09-21): the four terms are in, `Actor`/`Action`'s
+wording was corrected to match what was actually built (Actor covers
+only Character and Kreacher — no Machine — matching this feature's
+implementation already), and `roles-and-demarcation.md` now states
+Design chat has direct edit rights on `primer.md` content going
+forward, no Admin transcription step needed. No implementation impact —
+the corrected wording already matched what this feature built.
+
+### Steve's own Level 3 pass, and a follow-up: System log
+Steve ran the Level 3 walkthrough himself in the browser (not just CC
+driving it) and confirmed Round/Phase cycling, refill timing, free-form
+and staged resolution, and undo all behave as specified. He asked for
+one addition: visibility into the automatic engine cascade (Phase
+transitions, the Spawn step firing, win/loss results) that his own
+committed Actions don't surface, so he can sanity-check the engine is
+running correctly, not just that his own clicks work.
+
+Added `systemLog: string[]` to `GameCoreState` — not a brief-owned
+entity, an observability aid only. Logs Phase transitions, "Spawn step
+ran" (every time it structurally fires, even as a no-op), Round
+advances, and win/loss results (not routine null checks, which run
+after every Action and would flood it). Deliberately does *not* reset
+each Round (unlike `actionLog`) and is *not* reverted by undo — it's a
+historical trace of what actually happened, not part of the rules.
+Rendered in `Board.tsx` under a new "System log" section. 4 new unit
+tests cover it. Also fixed `game.ts`'s `setup()` to call
+`createInitialState()` instead of hand-duplicating `GameCoreState`'s
+shape — the duplication was a latent bug waiting to drift out of sync,
+caught while wiring the new field through.
+
+### Process correction — Change Approval rule added to CLAUDE.md
+Mid-session, CC proposed the `systemLog` design and began implementing
+it in the same turn, without waiting for explicit approval — discussion
+of a want ("it would be nice to see...") is not approval to build it.
+Steve corrected this directly. Added a new `### Change Approval`
+section to CLAUDE.md (now the first thing in the file) making this
+explicit and durable: no file create/edit/delete without Steve's
+explicit, specific approval for that exact change, overriding any
+general "just proceed" default. This is a separate, earlier gate than
+the pre-existing commit-message-approval rule.
+
+### Next steps
+- Relay the terminology addition above to Design chat.
+- Propose a commit for the Core Game Loop feature + System log work
+  (pending, this note is part of preparing that commit).
+- Next brief, whenever it arrives, will be the first feature to plug
+  into the `applyActionEffect`/`spawnStep`/`winLossCheck` hooks this
+  feature deliberately left as no-ops.

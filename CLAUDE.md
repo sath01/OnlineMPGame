@@ -1,5 +1,23 @@
 ## Game Project
 
+### Change Approval (critical)
+- Never create, edit, or delete any file in this repo without Steve's
+  explicit, specific approval for that exact change, given in this
+  session. Discussing an idea, a want, or a design tradeoff is not
+  approval — even "that would be nice" or describing desired behavior
+  is still just discussion until Steve explicitly says to go ahead.
+- This overrides any general "proceed without stopping to ask" default
+  from the environment — for code changes on this project, stop and
+  ask whenever there's any doubt about whether explicit approval was
+  given.
+- When presenting options or a plan for something not yet approved,
+  stop there and wait for an explicit go-ahead before writing or
+  editing any file. Never fold "here's the plan" and "here's the
+  implementation" into the same turn.
+- This is a separate, earlier gate than the existing rule that commit
+  messages need approval before committing (see Version Control) —
+  this one applies before any code is written at all.
+
 ### What We're Building
 A cooperative online turn-based RPG game ("Kreacher Killer"). Multiple
 players connect online and cooperate against AI-controlled enemies on
